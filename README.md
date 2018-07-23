@@ -66,7 +66,7 @@ adds a caching layer on top of the value returned by `::I18n.locale`.
 Proc.new { ::I18n.locale }
 ```
 
-This will prevent records created in, the 'en-GB' locale being returned in tests run in 'en-US' locale.
+This prevents records created in the 'en-GB' locale from being returned in tests run in 'en-US' locale.
 
 NOTE: It is not necessary to add a custom cache key for time or date.  Changes in date and time by libraries such as
 `TimeCop` are already handled automatically by the built in caching layers and the `cache_timeout` value.
