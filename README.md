@@ -83,6 +83,20 @@ at the start of testing and reset cache counters after each test.
  
 ### RSpec
 
+#### Disable Trasactional Fixtures
+
+For factory caching to work correctly, you must ensure that the `rspec-rails` `use_transactional_fixtures` setting is disabled:
+
+```ruby
+RSpec.configure do |config|
+  config.use_transactional_fixtures = false
+end
+```
+
+To run tests inside of transactions, we recommend using [DatabaseCleaner](https://rubygems.org/gems/database_cleaner) instead.
+
+#### Enable Factory Caching
+
 `FactoryBotCaching` provides a setup script for RSpec. This adds the necessary test hooks to an RSpec test suite to set 
 up and tear down factory caching in your test suite.
 
