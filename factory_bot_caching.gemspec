@@ -5,8 +5,11 @@ Gem::Specification.new do |spec|
   spec.version       = FactoryBotCaching::VERSION
   spec.authors       = ["Tim Mertens"]
   spec.email         = ["tim.mertens@filmchicago.org"]
-  spec.summary       = %q{factory_bot_caching provides a caching mechanism for records created by Factory Bot/Girl to significantly reduce test suite runtimes.}
+  spec.summary       = "A caching mechanism for test suites using Factory Bot/Factory Girl with ActiveRecord."
+  spec.description   = %q{The factory_bot_caching gem provides a caching mechanism for Factory Bot/Factory Girl to significantly reduce test suite runtimes in factory heavy test suites.}
   spec.license       = "MIT"
+  spec.homepage      = "https://github.com/avantoss/factory_bot_caching"
+
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
