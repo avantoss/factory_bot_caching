@@ -1,5 +1,7 @@
 # FactoryBotCaching
 
+[![CircleCI](https://circleci.com/gh/avantoss/factory_bot_caching.svg?style=svg)](https://circleci.com/gh/avantoss/factory_bot_caching)
+
 FactoryBotCaching is a gem which implements a caching layer for FactoryGirl with Rails/ActiveRecord.
 
 Factory Caching enables you to leverage the flexibility of factories with some of the performance benefits
