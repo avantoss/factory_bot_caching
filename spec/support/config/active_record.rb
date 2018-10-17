@@ -30,10 +30,10 @@ DatabaseCleaner.strategy = :transaction
 
 RSpec.configure do |config|
   config.before(:suite) do
-    ActiveRecord::Base.establish_connection(adapter:  'postgresql')
+    ActiveRecord::Base.establish_connection(adapter:  'postgresql', host: 'localhost')
     ActiveRecord::Base.connection.drop_database('factory_bot_caching_test')
     ActiveRecord::Base.connection.create_database('factory_bot_caching_test')
-    ActiveRecord::Base.establish_connection(adapter:  'postgresql', database: 'factory_bot_caching_test')
+    ActiveRecord::Base.establish_connection(adapter:  'postgresql', host: 'localhost', database: 'factory_bot_caching_test')
   end
 
   config.before(:each) do

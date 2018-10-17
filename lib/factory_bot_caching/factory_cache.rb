@@ -28,7 +28,7 @@ module FactoryBotCaching
   class FactoryCache
     def initialize(factory_name:)
       @factory_name       = factory_name
-      @build_class        = FactoryGirl.factory_by_name(factory_name).build_class
+      @build_class        = FactoryBot.factory_by_name(factory_name).build_class
       @cache              = new_cache(@build_class)
       @cachable_overrides = []
       collect_uncachable_traits
@@ -95,8 +95,8 @@ module FactoryBotCaching
     # performance over previous versions of this validation.
     #
     # For example:
-    #   FactoryGirl.create(:customer, name: 'John Doe', email: 'john.doe@example.test')
-    #   FactoryGirl.create(:customer, name: 'John Doe', address_id: 123)
+    #   FactoryBot.create(:customer, name: 'John Doe', email: 'john.doe@example.test')
+    #   FactoryBot.create(:customer, name: 'John Doe', address_id: 123)
     #
     # In the above examples, `address_id` is a passed in association and should not be cached.
     #

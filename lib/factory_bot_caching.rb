@@ -22,13 +22,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require 'factory_girl'
+require 'factory_bot'
 
 require 'factory_bot_caching/version'
 require 'factory_bot_caching/caching_factory_runner'
 
 module FactoryBotCaching
   def self.initialize
-    FactoryGirl::FactoryRunner.prepend(FactoryBotCaching::CachingFactoryRunner)
+    FactoryBot::FactoryRunner.prepend(FactoryBotCaching::CachingFactoryRunner)
   end
 end

@@ -2,15 +2,15 @@
 
 [![CircleCI](https://circleci.com/gh/avantoss/factory_bot_caching.svg?style=svg)](https://circleci.com/gh/avantoss/factory_bot_caching)
 
-FactoryBotCaching is a gem which implements a caching layer for FactoryGirl with Rails/ActiveRecord.
+FactoryBotCaching is a gem which implements a caching layer for FactoryBot with Rails/ActiveRecord.
 
 Factory Caching enables you to leverage the flexibility of factories with some of the performance benefits
-of fixtures. 
+of fixtures.
 
-## FactoryGirl / FactoryBot Support
+## FactoryGirl Support
 
-* `FactoryBotCaching` `~> 1.0.0` currently only offers built-in support for the `FactoryGirl` gem/namespace.
-* Support for the newer `FactoryBot` namespace is expected in version 2 or earlier.
+* `FactoryBotCaching` `~> 2.0.0` currently only offers built-in support for the `FactoryBot` gem/namespace.
+* Support for the older `FactoryGirl` namespace is available in version 1.0.0
 
 ## Installation
 
@@ -32,11 +32,11 @@ Or install it yourself as:
 
 ### Configuration
 
-FactoryBotCaching is disabled by default.  To enable it, add a configuration block like the following to your test 
+FactoryBotCaching is disabled by default.  To enable it, add a configuration block like the following to your test
 setup file(s) to enable caching and configure any other options as desired:
 
 ```ruby
-# rails_helper.rb 
+# rails_helper.rb
 require 'factory_bot_caching'
 
 FactoryBotCaching.configure do |config|
@@ -58,14 +58,14 @@ Disables factory caching.
 
 ##### cache_timeout
 
-The amount of time in seconds after creation that a cached factory record is considered valid to be returned from 
+The amount of time in seconds after creation that a cached factory record is considered valid to be returned from
 the cache. Defaults to 900 seconds (15 minutes).
 
 ##### custom_cache_key
 
 The `custom_cache_key` is a Proc that can be executed to generate a value or list/hash of values to use as a custom
  cache key for cached records.  By default, no custom caching layer is used.
- 
+
 For example, if you have factories which behave differently across locales, you may want to use a `custom_cache_key` which
 adds a caching layer on top of the value returned by `::I18n.locale`.
 
@@ -82,7 +82,7 @@ NOTE: It is not necessary to add a custom cache key for time or date.  Changes i
 
 In addition to configuring/enabling Factory Caching, it is necessary to configure hooks in your test suite to initialize
 at the start of testing and reset cache counters after each test.
- 
+
 ### RSpec
 
 #### Disable Trasactional Fixtures
@@ -99,10 +99,10 @@ To run tests inside of transactions, we recommend using [DatabaseCleaner](https:
 
 #### Enable Factory Caching
 
-`FactoryBotCaching` provides a setup script for RSpec. This adds the necessary test hooks to an RSpec test suite to set 
+`FactoryBotCaching` provides a setup script for RSpec. This adds the necessary test hooks to an RSpec test suite to set
 up and tear down factory caching in your test suite.
 
-In your test setup after requiring FactoryGirl:
+In your test setup after requiring FactoryBot:
 
 ```ruby
 # rails_helper.rb
@@ -116,7 +116,7 @@ RSpec.describe "factory caching metadata" do
   it "runs with caching disabled", :no_factory_caching do
     expect(FactoryBotCaching.enabled?).to be false
   end
-  
+
   it "runs with caching disabled" do
     expect(FactoryBotCaching.enabled?).to be true
   end
@@ -128,10 +128,10 @@ end
 To use Factory Bot Caching in other test frameworks, see `lib/factory_bot_caching/rspec.rb` for the necessary callbacks
 that must be run to use caching.
 
-Specifically, you must call `FactoryBotCaching.initialize` before running any tests, and 
+Specifically, you must call `FactoryBotCaching.initialize` before running any tests, and
 `FactoryBotCaching::CacheManager.instance.reset_cache_counter` after each test.
 
-Pull requests to add support for other test frameworks are welcome! 
+Pull requests to add support for other test frameworks are welcome!
 
 ## Development
 

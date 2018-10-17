@@ -25,7 +25,7 @@
 require 'spec_helper'
 require 'timecop'
 require 'active_record'
-require 'factory_girl'
+require 'factory_bot'
 
 class FactoryCachingAssociationTest < ActiveRecord::Base
   self.table_name = 'factory_caching_association_test'
@@ -37,7 +37,7 @@ class FactoryCachingTest < ActiveRecord::Base
   belongs_to :factory_caching_association_test, class_name: 'FactoryCachingAssociationTest'
 end
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :factory_caching_test, class: FactoryCachingTest do
     text 'Here is some text'
     status 'active'
@@ -101,7 +101,7 @@ describe 'Factory Caching' do
 
     it 'creates factory instances successfully' do
       Timecop.freeze(six_minutes_past_hour) do
-        @factories[:created_six_minutes_past_hour] = FactoryGirl.create(:factory_caching_test)
+        @factories[:created_six_minutes_past_hour] = FactoryBot.create(:factory_caching_test)
         expect(@factories[:created_six_minutes_past_hour]).to be_persisted
       end
     end
@@ -113,14 +113,14 @@ describe 'Factory Caching' do
 
     it 'returns factories that were cached by previous examples' do
       Timecop.freeze(seven_minutes_past_hour) do
-        expect(FactoryGirl.create(:factory_caching_test)).to eq @factories[:created_six_minutes_past_hour]
+        expect(FactoryBot.create(:factory_caching_test)).to eq @factories[:created_six_minutes_past_hour]
       end
     end
 
     it 'does not return factories that were cached under a different cache_key' do
       allow(I18n).to receive(:locale).and_return(:'en-Mars')
       Timecop.freeze(seven_minutes_past_hour) do
-        mars_instance = FactoryGirl.create(:factory_caching_test)
+        mars_instance = FactoryBot.create(:factory_caching_test)
         @factories[:mars_created_seven_minutes_past_hour] = mars_instance
         expect(mars_instance).not_to eq @factories[:created_six_minutes_past_hour]
       end
@@ -129,7 +129,7 @@ describe 'Factory Caching' do
     it 'doesnt return factories created in the future' do
       # When Timecopped to before a previous test, it should not return the record that was created in the future
       Timecop.freeze(five_minutes_past_hour) do
-        @factories[:created_five_minutes_past_hour] = FactoryGirl.create(:factory_caching_test)
+        @factories[:created_five_minutes_past_hour] = FactoryBot.create(:factory_caching_test)
         expect(@factories[:created_five_minutes_past_hour]).not_to eq @factories[:created_six_minutes_past_hour]
       end
     end
@@ -139,7 +139,7 @@ describe 'Factory Caching' do
       Timecop.freeze(seven_minutes_past_hour) do
         previously_created_record_id = @factories[:mars_created_seven_minutes_past_hour].id
         expect(FactoryCachingTest.exists?(previously_created_record_id)).to be true
-        expect(FactoryGirl.create(:factory_caching_test)).to eq @factories[:mars_created_seven_minutes_past_hour]
+        expect(FactoryBot.create(:factory_caching_test)).to eq @factories[:mars_created_seven_minutes_past_hour]
       end
     end
 
@@ -149,8 +149,8 @@ describe 'Factory Caching' do
       # inverse of the order the tests actually ran in.
       Timecop.freeze(seven_minutes_past_hour) do
         factories = [
-          FactoryGirl.create(:factory_caching_test),
-          FactoryGirl.create(:factory_caching_test)
+          FactoryBot.create(:factory_caching_test),
+          FactoryBot.create(:factory_caching_test)
         ]
         expect(factories).to eq [@factories[:created_five_minutes_past_hour], @factories[:created_six_minutes_past_hour]]
       end
@@ -159,8 +159,8 @@ describe 'Factory Caching' do
     it 'returns multiple unique, cached instances of the same factory when called multiple times in same example' do
       Timecop.freeze(seven_minutes_past_hour) do
         factories = [
-          FactoryGirl.create(:factory_caching_test),
-          FactoryGirl.create(:factory_caching_test)
+          FactoryBot.create(:factory_caching_test),
+          FactoryBot.create(:factory_caching_test)
         ]
         expect(factories).to match_array [@factories[:created_five_minutes_past_hour], @factories[:created_six_minutes_past_hour]]
       end
@@ -168,10 +168,10 @@ describe 'Factory Caching' do
 
     it 'returns multiple new instances when called multiple times in same example' do
       Timecop.freeze(ten_minutes_past_hour) do
-        expect(FactoryGirl.create(:factory_caching_test)).to eq @factories[:created_five_minutes_past_hour]
-        expect(FactoryGirl.create(:factory_caching_test)).to eq @factories[:created_six_minutes_past_hour]
-        @factories[:created_ten_minutes_past_hour_1] = FactoryGirl.create(:factory_caching_test)
-        @factories[:created_ten_minutes_past_hour_2] = FactoryGirl.create(:factory_caching_test)
+        expect(FactoryBot.create(:factory_caching_test)).to eq @factories[:created_five_minutes_past_hour]
+        expect(FactoryBot.create(:factory_caching_test)).to eq @factories[:created_six_minutes_past_hour]
+        @factories[:created_ten_minutes_past_hour_1] = FactoryBot.create(:factory_caching_test)
+        @factories[:created_ten_minutes_past_hour_2] = FactoryBot.create(:factory_caching_test)
 
         expect(@factories[:created_ten_minutes_past_hour_1]).not_to eq @factories[:created_five_minutes_past_hour]
         expect(@factories[:created_ten_minutes_past_hour_1]).not_to eq @factories[:created_six_minutes_past_hour]
@@ -184,34 +184,34 @@ describe 'Factory Caching' do
 
     context 'traits' do
       it 'caches factories uniquely by trait' do
-        @factories[:trait_1] = FactoryGirl.create(:factory_caching_test)
-        @factories[:trait_2] = FactoryGirl.create(:factory_caching_test, :inactive)
-        @factories[:trait_3] = FactoryGirl.create(:factory_caching_test, :new)
+        @factories[:trait_1] = FactoryBot.create(:factory_caching_test)
+        @factories[:trait_2] = FactoryBot.create(:factory_caching_test, :inactive)
+        @factories[:trait_3] = FactoryBot.create(:factory_caching_test, :new)
         expect(@factories[:trait_1]).not_to eq @factories[:trait_2]
         expect(@factories[:trait_1]).not_to eq @factories[:trait_3]
         expect(@factories[:trait_2]).not_to eq @factories[:trait_3]
       end
 
       it 'retrieves cached factories uniquely by trait' do
-        expect(FactoryGirl.create(:factory_caching_test)).to eq @factories[:trait_1]
-        expect(FactoryGirl.create(:factory_caching_test, :inactive)).to eq @factories[:trait_2]
-        expect(FactoryGirl.create(:factory_caching_test, :new)).to eq @factories[:trait_3]
+        expect(FactoryBot.create(:factory_caching_test)).to eq @factories[:trait_1]
+        expect(FactoryBot.create(:factory_caching_test, :inactive)).to eq @factories[:trait_2]
+        expect(FactoryBot.create(:factory_caching_test, :new)).to eq @factories[:trait_3]
       end
     end
 
     context 'overrides' do
       it 'creates records with overrides' do
-        @factories[:cacheable_overrides]   = FactoryGirl.create(:factory_caching_test, status: 'limbo')
-        @factories[:uncacheable_overrides] = FactoryGirl.create(:factory_caching_test, factory_caching_association_test: FactoryGirl.create(:factory_caching_association_test))
+        @factories[:cacheable_overrides]   = FactoryBot.create(:factory_caching_test, status: 'limbo')
+        @factories[:uncacheable_overrides] = FactoryBot.create(:factory_caching_test, factory_caching_association_test: FactoryBot.create(:factory_caching_association_test))
       end
 
       it 'caches factory calls where table values are overridden' do
-        cachable_record = FactoryGirl.create(:factory_caching_test, status: 'limbo')
+        cachable_record = FactoryBot.create(:factory_caching_test, status: 'limbo')
         expect(cachable_record).to eq @factories[:cacheable_overrides]
       end
 
       it 'does not cache factory calls which have overrides of their associations' do
-        uncachable_record = FactoryGirl.create(:factory_caching_test, factory_caching_association_test: FactoryGirl.create(:factory_caching_association_test))
+        uncachable_record = FactoryBot.create(:factory_caching_test, factory_caching_association_test: FactoryBot.create(:factory_caching_association_test))
         expect(uncachable_record).not_to eq @factories[:uncacheable_overrides]
       end
     end
@@ -219,12 +219,12 @@ describe 'Factory Caching' do
 
   describe 'with caching disabled', :no_factory_caching, order: :defined do
     it 'creates factory instances successfully' do
-      @factories[:created_without_caching] = FactoryGirl.create(:factory_caching_test)
+      @factories[:created_without_caching] = FactoryBot.create(:factory_caching_test)
       expect(@factories[:created_without_caching]).to be_persisted
     end
 
     it 'does not return cached factories' do
-      expect(FactoryGirl.create(:factory_caching_test)).not_to eq @factories[:created_without_caching]
+      expect(FactoryBot.create(:factory_caching_test)).not_to eq @factories[:created_without_caching]
     end
   end
 end

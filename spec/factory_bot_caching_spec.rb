@@ -30,8 +30,8 @@ RSpec.describe FactoryBotCaching do
   end
 
   describe '#initialize' do
-    it 'injects factory caching into FactoryGirl' do
-      expect(FactoryGirl::FactoryRunner).to receive(:prepend).with(FactoryBotCaching::CachingFactoryRunner)
+    it 'injects factory caching into FactoryBot' do
+      expect(FactoryBot::FactoryRunner).to receive(:prepend).with(FactoryBotCaching::CachingFactoryRunner)
       FactoryBotCaching.initialize
     end
   end

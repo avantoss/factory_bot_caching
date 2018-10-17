@@ -13,3 +13,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Support for caching FactoryGirl factories when using ActiveRecord with Postgresql
 - User defined cache keys
 - Customizable cache timeout
+
+## [2.0.0] - 2018-10-17
+### Added
+
+- Support for FactoryBot namespace
+
