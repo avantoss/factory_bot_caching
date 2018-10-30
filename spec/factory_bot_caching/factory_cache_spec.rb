@@ -24,7 +24,7 @@
 
 require 'factory_bot_caching/factory_cache'
 require 'active_record'
-require 'factory_girl'
+require 'factory_bot'
 
 describe FactoryBotCaching::FactoryCache do
   subject { described_class.new(factory_name: :thingy) }
@@ -61,8 +61,8 @@ describe FactoryBotCaching::FactoryCache do
   let(:custom_cache_key) { nil }
 
   before do
-    factory = instance_double(FactoryGirl::Factory, build_class: build_class)
-    allow(FactoryGirl).to receive(:factory_by_name).with(:thingy).and_return(factory)
+    factory = instance_double(FactoryBot::Factory, build_class: build_class)
+    allow(FactoryBot).to receive(:factory_by_name).with(:thingy).and_return(factory)
     allow(FactoryBotCaching.configuration).to receive(:custom_cache_key).and_return(custom_cache_key)
     allow(FactoryBotCaching::CustomizedCache).to receive(:new).with(build_class: build_class, cache_key_generator: custom_cache_key).and_return(cache, cache_2)
     allow(FactoryBotCaching::FactoryRecordCache).to receive(:new).with(build_class: build_class).and_return(cache, cache_2)
